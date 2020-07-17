@@ -20,7 +20,16 @@ const client = new SecretManagerServiceClient();
  */
 
 async function pullSecret() {
-  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) return true;
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    console.log('[GCS] Using Application Credentials');
+    return true;
+  }
+  console.log('[GCS] Secret Credentials');
+
+  if (!process.env.GOOGLE_SECRET) {
+    console.log('[GCS] Google Secret is invalid, falling back.');
+    return true;
+  }
 
   const saveCredentialsFile = (file, contents) => {
     return new Promise((resolve, reject) => {
